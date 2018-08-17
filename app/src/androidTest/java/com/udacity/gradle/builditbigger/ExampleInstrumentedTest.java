@@ -3,6 +3,9 @@ package com.udacity.gradle.builditbigger;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Pair;
+
+import com.udacity.gradle.jokes.Joker;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -12,6 +15,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Instrumentation test, which will execute on an Android device.
@@ -28,9 +32,9 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
         EventBus.getDefault().register(this);
         mLatch = new CountDownLatch(1);
-        new EndpointsAsyncTask().execute(appContext);
+        new EndpointsAsyncTask().execute(new Pair<>(appContext, "Test Joke"));
         try {
-            mLatch.await();
+            mLatch.await(30, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             Assert.fail();
             e.printStackTrace();
@@ -41,7 +45,7 @@ public class ExampleInstrumentedTest {
     public void onMessageEvent(String joke) {
         EventBus.getDefault().unregister(this);
         mLatch.countDown();
-        if (joke == null || joke.isEmpty()) {
+        if (joke.equals("101")) {
             Assert.fail();
         }
     }

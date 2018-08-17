@@ -2,7 +2,7 @@
     package="my.library">
 
     <application>
-        <activity android:name=".libraryActivity"/>
+        <activity android:name=".LibraryActivity"/>
     </application>
 
 </manifest>
